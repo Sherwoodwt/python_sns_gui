@@ -1,12 +1,15 @@
+"""
+Library of SNS functions.
+"""
+
 import boto3
-import tkinter
 
 from secret_settings import EMAIL
 
 def create_topic(topic_name):
   """
   @param topic_name: Name of topic that will be created
-  
+
   @return: Topic Arn
   """
   sns = boto3.client('sns')
