@@ -4,7 +4,9 @@ Library of SNS functions.
 
 import boto3
 
-from secret_settings import EMAIL
+from secret_settings import PROFILE
+
+boto3.setup_default_session(profile_name=PROFILE)
 
 def create_topic(topic_name):
   """
@@ -25,9 +27,9 @@ def create_subscription(topic_arn, email):
   subscribes given email to topic if not already subscribed
   """
   sns = boto3.client('sns')
-  subscriptions = sns.list_subscriptions_by_topic(TopicArn=topic_arn)
+  subscriptions = list_subscriptions(topic_arn)
   already_subscribed = False
-  for sub in subscriptions['Subscriptions']:
+  for sub in subscriptions:
     if sub['Endpoint'] == email:
       already_subscribed = True
       break
@@ -50,3 +52,12 @@ def publish_message(topic_arn, subject, message):
     Subject=subject,
     Message=message,
   )
+
+def list_subscriptions(topic_arn):
+  """
+  @param topic_arn: Topic
+
+  @returns: List of subscriptions
+  """
+  sns = boto3.client('sns')
+  return sns.list_subscriptions_by_topic(TopicArn=topic_arn)['Subscriptions']
