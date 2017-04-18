@@ -6,6 +6,7 @@ from secret_settings import EMAIL
 def create_topic(topic_name):
   """
   @param topic_name: Name of topic that will be created
+  
   @return: Topic Arn
   """
   sns = boto3.client('sns')
@@ -46,18 +47,3 @@ def publish_message(topic_arn, subject, message):
     Subject=subject,
     Message=message,
   )
-
-
-def run():
-  boto3.setup_default_session(profile_name='willypluto_work')
-  topic = create_topic('dingdong_notifications')
-  create_subscription(topic, EMAIL)
-  publish_message(topic, DEFAULT_SUBJECT, DEFAULT_MESSAGE)
-
-DEFAULT_SUBJECT = 'Hello World'
-
-DEFAULT_MESSAGE = """
-This is the best thing.
-
-Nothing else like it. You are not impressed.
-"""
